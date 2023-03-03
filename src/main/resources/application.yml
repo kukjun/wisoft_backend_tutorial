@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 4
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+  profiles:
+    active: dev
+    group:
+      dev:
+        - dev
+      prod:
+        - prod
