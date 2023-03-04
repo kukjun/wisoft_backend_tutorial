@@ -1,8 +1,8 @@
 package io.wisoft.tutorial_backend.interceptor;
 
 import io.wisoft.tutorial_backend.handler.AuthenticationException;
-import io.wisoft.tutorial_backend.jwt.JwtProvider;
-import io.wisoft.tutorial_backend.jwt.JwtTokenExtractor;
+import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
+import io.wisoft.tutorial_backend.util.jwt.JwtTokenExtractor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

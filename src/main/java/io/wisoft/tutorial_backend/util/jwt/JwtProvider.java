@@ -1,11 +1,10 @@
-package io.wisoft.tutorial_backend.jwt;
+package io.wisoft.tutorial_backend.util.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.wisoft.tutorial_backend.domain.MemberRole;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;

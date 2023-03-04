@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,6 +24,9 @@ public class Lecture extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member createMember;
 
+    @OneToMany(mappedBy = "belongLecture")
+    private List<Post> posts;
+
     /**
      * 정적 생성자
      */
@@ -38,5 +43,4 @@ public class Lecture extends BaseEntity {
         lecture.teacher = teacher;
         return lecture;
     }
-
 }

@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,6 +24,9 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Lecture belongLecture;
 
+    @OneToMany(mappedBy = "belongPost")
+    private List<Comment> comments;
+
     /**
      * 정적 생성자
      */
@@ -37,6 +42,17 @@ public class Post extends BaseEntity {
         post.createMember = createMember;
         post.belongLecture = belongLecture;
         return post;
+    }
+
+    /**
+     * 연관관계 편의 메서드
+     */
+    public void connectBelongLecture(Lecture lecture) {
+        this.belongLecture = lecture;
+        lecture.getPosts().add(this);
+    }
+    public void disconnectBelongLecture() {
+        this.belongLecture.getPosts().remove(this);
     }
 
 }

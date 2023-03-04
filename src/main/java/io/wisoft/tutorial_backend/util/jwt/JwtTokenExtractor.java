@@ -1,4 +1,4 @@
-package io.wisoft.tutorial_backend.jwt;
+package io.wisoft.tutorial_backend.util.jwt;
 
 import io.wisoft.tutorial_backend.handler.AuthenticationException;
 import jakarta.servlet.http.HttpServletRequest;

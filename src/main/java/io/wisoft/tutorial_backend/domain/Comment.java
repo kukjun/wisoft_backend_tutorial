@@ -35,4 +35,17 @@ public class Comment extends BaseEntity {
         comment.belongPost = belongPost;
         return comment;
     }
+
+    /**
+     * 연관관계 편의 메서드
+     */
+    public void connectBelongPost(Post post) {
+        this.belongPost = post;
+        post.getComments().add(this);
+    }
+
+    public void disconnectBelongPost() {
+        this.belongPost.getComments().remove(this);
+    }
+
 }
