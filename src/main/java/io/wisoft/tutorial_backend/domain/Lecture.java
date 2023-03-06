@@ -34,13 +34,31 @@ public class Lecture extends BaseEntity {
             String name,
             String schedule,
             String content,
-            String teacher
+            String teacher,
+            Member createMember
     ) {
         Lecture lecture = new Lecture();
         lecture.name = name;
         lecture.schedule = schedule;
         lecture.content = content;
         lecture.teacher = teacher;
+        lecture.createMember = createMember;
         return lecture;
+    }
+
+    /**
+     * 비지니스 로직
+     */
+
+    public void update(
+            String name,
+            String schedule,
+            String content,
+            String teacher
+    ) {
+        this.name = name;
+        this.schedule = schedule;
+        this.content = content;
+        this.teacher = teacher;
     }
 }
