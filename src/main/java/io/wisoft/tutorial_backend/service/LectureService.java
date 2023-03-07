@@ -42,13 +42,13 @@ public class LectureService {
     }
 
     @Transactional
-    public void updateLecture(Long lectureId, LectureDto updateDto, Long createMemberId) {
+    public void updateLecture(Long lectureId, LectureDto updateDto, Long currentMemberId) {
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(
                         () -> new RuntimeException("lecture not found")
                 );
 
-        Member member = memberRepository.findById(createMemberId).orElseThrow(
+        Member member = memberRepository.findById(currentMemberId).orElseThrow(
                 () -> new RuntimeException("member not found")
         );
 

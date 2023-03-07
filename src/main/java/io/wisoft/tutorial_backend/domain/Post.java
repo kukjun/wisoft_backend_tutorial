@@ -1,10 +1,12 @@
 package io.wisoft.tutorial_backend.domain;
 
+import io.wisoft.tutorial_backend.service.dto.UpdatePostDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,7 +27,7 @@ public class Post extends BaseEntity {
     private Lecture belongLecture;
 
     @OneToMany(mappedBy = "belongPost")
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     /**
      * 정적 생성자
@@ -40,7 +42,7 @@ public class Post extends BaseEntity {
         post.title = title;
         post.content = content;
         post.createMember = createMember;
-        post.belongLecture = belongLecture;
+        post.connectBelongLecture(belongLecture);
         return post;
     }
 
@@ -53,6 +55,14 @@ public class Post extends BaseEntity {
     }
     public void disconnectBelongLecture() {
         this.belongLecture.getPosts().remove(this);
+    }
+
+    /**
+     * 비지니스 메서드
+     */
+    public void update(UpdatePostDto dto) {
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
     }
 
 }

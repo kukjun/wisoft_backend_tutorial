@@ -6,6 +6,7 @@ import io.wisoft.tutorial_backend.domain.MemberRole;
 import io.wisoft.tutorial_backend.repository.MemberRepository;
 import io.wisoft.tutorial_backend.service.dto.SigninRequest;
 import io.wisoft.tutorial_backend.service.dto.SignupDto;
+import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,11 @@ class MemberControllerTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private JwtProvider jwtProvider;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private Long storedMemberId;
 
     @BeforeEach
     public void prepareTest() {
@@ -57,6 +62,7 @@ class MemberControllerTest {
                 MemberRole.USER
         );
         memberRepository.save(member);
+        storedMemberId = member.getId();
 
     }
 
@@ -110,9 +116,29 @@ class MemberControllerTest {
         ).andReturn().getResponse().getContentAsString();
 
         System.out.println("response = " + response);
-
-
     }
+
+    @Test
+    @DisplayName("회원 조회 통합 테스트 - 성공")
+    public void findMemberSuccessTest() throws Exception {
+        //given
+        Member createMember = memberRepository.findById(storedMemberId).get();
+        System.out.println("createMember: " + createMember.getNickname());
+        String token = jwtProvider.generateToken(
+                createMember.getId(),
+                createMember.getNickname(),
+                createMember.getRole().toString()
+        );
+        //when
+        //then
+        mvc.perform(
+                get("/api/members/" + storedMemberId)
+                        .header("Authorization", "Bearer " + token)
+        ).andExpect(
+                status().isOk()
+        );
+    }
+
 
 
 }

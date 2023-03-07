@@ -2,6 +2,7 @@ package io.wisoft.tutorial_backend.controller;
 
 import io.wisoft.tutorial_backend.service.LectureService;
 import io.wisoft.tutorial_backend.service.MemberService;
+import io.wisoft.tutorial_backend.service.dto.FindLectureDto;
 import io.wisoft.tutorial_backend.service.dto.LectureDto;
 import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
 import io.wisoft.tutorial_backend.util.jwt.JwtCommunicationServlet;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +33,12 @@ public class LectureController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("")
+    ResponseEntity<List<FindLectureDto>> findAll() {
+        List<FindLectureDto> lectureList = lectureService.findLectureList();
+        return ResponseEntity.status(HttpStatus.OK).body(lectureList);
+    }
+
     @PatchMapping("/{lectureId}")
     ResponseEntity update(HttpServletRequest request, @PathVariable("lectureId") Long lectureId, @RequestBody LectureDto lectureDto) {
         String token = jwtCommunicationServlet.extract(request);
@@ -38,6 +47,8 @@ public class LectureController {
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+
 
 
 }

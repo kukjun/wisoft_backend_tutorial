@@ -1,12 +1,13 @@
 package io.wisoft.tutorial_backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.wisoft.tutorial_backend.domain.Lecture;
-import io.wisoft.tutorial_backend.domain.Member;
-import io.wisoft.tutorial_backend.domain.MemberRole;
+import io.wisoft.tutorial_backend.domain.*;
+import io.wisoft.tutorial_backend.repository.CommentRepository;
 import io.wisoft.tutorial_backend.repository.LectureRepository;
 import io.wisoft.tutorial_backend.repository.MemberRepository;
-import io.wisoft.tutorial_backend.service.dto.LectureDto;
+import io.wisoft.tutorial_backend.repository.PostRepository;
+import io.wisoft.tutorial_backend.service.dto.CreateCommentDto;
+import io.wisoft.tutorial_backend.service.dto.UpdateCommentDto;
 import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,33 +21,33 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
-class LectureControllerTest {
+class CommentControllerTest {
     private MockMvc mvc;
-
     @Autowired
     private WebApplicationContext ctx;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Autowired
     private JwtProvider jwtProvider;
 
     @Autowired
     private MemberRepository memberRepository;
-
     @Autowired
     private LectureRepository lectureRepository;
+    @Autowired
+    private PostRepository postRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
-    public Long createdLectureId;
+    private Long storedPostId;
+    private Long storedComment;
+    private Long currentMemberId;
 
     @BeforeEach
     public void prepareTest() {
@@ -55,53 +56,79 @@ class LectureControllerTest {
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .build();
 
-        String email = "test@naver.com";
+        String lectureCreateMemberEmail = "test@naver.com";
         // 'password' encoding
-        String password = "$2a$12$tRT.z.BNFEdZ0jM6tBJ0a.h7XmS.trMJf/STNUF.0Ufcajwf/ovDG";
-        String nickname = "이미 저장된 데이터";
-        Member member = Member.newInstance(
-                email,
-                password,
-                nickname,
+        String lectureCreateMemberPassword = "$2a$12$tRT.z.BNFEdZ0jM6tBJ0a.h7XmS.trMJf/STNUF.0Ufcajwf/ovDG";
+        String lectureCreateMemberNickname = "이미 저장된 데이터";
+        Member lectureCreateMember = Member.newInstance(
+                lectureCreateMemberEmail,
+                lectureCreateMemberPassword,
+                lectureCreateMemberNickname,
                 MemberRole.ADMIN
         );
-        memberRepository.save(member);
+        memberRepository.save(lectureCreateMember);
+
+        Member postCreateMember = Member.newInstance(
+                "postCreate@naver.com",
+                "$2a$12$tRT.z.BNFEdZ0jM6tBJ0a.h7XmS.trMJf/STNUF.0Ufcajwf/ovDG",
+                "post 생성하는 멤버",
+                MemberRole.USER
+        );
+        memberRepository.save(postCreateMember);
+
+        Member commentCreateMember = Member.newInstance(
+                "commentCreate@naver.com",
+                "$2a$12$tRT.z.BNFEdZ0jM6tBJ0a.h7XmS.trMJf/STNUF.0Ufcajwf/ovDG",
+                "comment 생성하는 멤버",
+                MemberRole.USER
+        );
+        memberRepository.save(commentCreateMember);
+
+        currentMemberId = commentCreateMember.getId();
 
         String lectureName = "테스트 Lecture 추가";
         String lectureSchedule = "금,19시,21시";
         String lectureContent = "테스트를 위한 내용";
         String lectureTeacher = "김민기";
-        LectureDto dto = LectureDto.newInstance(
+        Lecture lecture = Lecture.newInstance(
                 lectureName,
                 lectureSchedule,
                 lectureContent,
-                lectureTeacher
-        );
-        Lecture lecture = Lecture.newInstance(
-                dto.getName(),
-                dto.getSchedule(),
-                dto.getContent(),
-                dto.getTeacher(),
-                member
+                lectureTeacher,
+                lectureCreateMember
         );
         lectureRepository.save(lecture);
 
-        createdLectureId = lecture.getId();
+        Post post = Post.newInstance(
+                "테스트 Post 추가",
+                "테스트를 위한 Post 추가",
+                postCreateMember,
+                lecture
 
+        );
+        postRepository.save(post);
+        storedPostId = post.getId();
+
+        Comment comment = Comment.newInstance(
+                "storedComment",
+                commentCreateMember,
+                post
+        );
+        commentRepository.save(comment);
+        storedComment = comment.getId();
     }
 
     @Test
-    @DisplayName("강의 등록 통합 테스트 - 성공")
-    public void lectureRegisterSuccessTest() throws Exception {
+    @DisplayName("덧글 등록 통합 테스트 - 성공")
+    public void commentRegisterSuccessTest() throws Exception {
         //given
-        LectureDto dto = LectureDto.newInstance(
-                "스프링 간단 튜토리얼",
-                "화,19시,21시",
-                "스프림으로 만들어보는 간단한 웹 서버",
-                "이국준"
+        CreateCommentDto dto = CreateCommentDto.newInstance(
+                "덧글 작성 등록",
+                storedPostId
         );
+        String jsonRequest = objectMapper.writeValueAsString(dto);
 
-        Member createMember = memberRepository.findByEmail("test@naver.com").get();
+        Member createMember = memberRepository.findById(currentMemberId).get();
         System.out.println("createMember: " + createMember.getNickname());
         String token = jwtProvider.generateToken(
                 createMember.getId(),
@@ -109,79 +136,45 @@ class LectureControllerTest {
                 createMember.getRole().toString()
         );
 
-        String jsonRequest = objectMapper.writeValueAsString(dto);
-
         //when
         //then
         mvc.perform(
-                post("/api/lectures")
+                post("/api/comments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest)
                         .header("Authorization", "Bearer " + token)
         ).andExpect(
                 status().isCreated()
-        ).andExpect(
-                header().exists("Authorization")
         );
-
     }
 
     @Test
-    @DisplayName("강의 수정 통합 테스트 - 성공")
-    public void lectureUpdateSuccessTest() throws Exception {
+    @DisplayName("덧글 수정 통합 테스트 - 성공")
+    public void updateCommentSuccessTest() throws Exception {
         //given
-        LectureDto dto = LectureDto.newInstance(
-                "국준 튜토리얼",
-                "화,19시,21시",
-                "스프림으로 만들어보는 간단한 웹 서버",
-                "서동권"
+        UpdateCommentDto dto = UpdateCommentDto.newInstance(
+                "저장된 테스트"
         );
+        String jsonRequest = objectMapper.writeValueAsString(dto);
 
-        Member createMember = memberRepository.findByEmail("test@naver.com").get();
+        Member createMember = memberRepository.findById(currentMemberId).get();
         System.out.println("createMember: " + createMember.getNickname());
         String token = jwtProvider.generateToken(
                 createMember.getId(),
                 createMember.getNickname(),
                 createMember.getRole().toString()
         );
-
-        String jsonRequest = objectMapper.writeValueAsString(dto);
-
-
         //when
         //then
         mvc.perform(
-                patch("/api/lectures/" + createdLectureId)
+                patch("/api/comments/" + storedComment)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest)
                         .header("Authorization", "Bearer " + token)
         ).andExpect(
                 status().isCreated()
-        ).andExpect(header().exists("Authorization"));
-
+        );
     }
-
-    @Test
-    @DisplayName("모든 강의 조회 통합 테스트 - 성공")
-    public void findAllLectures() throws Exception {
-        //given
-        int expectedSize = 1;
-        String expectLectureName = "테스트 Lecture 추가";
-        String expectLectureSchedule = "금,19시,21시";
-        String expectLectureContent = "테스트를 위한 내용";
-        String expectLectureTeacher = "김민기";
-
-        //when
-        //then
-        String StringResponse = mvc.perform(
-                get("/api/lectures")
-        ).andExpect(
-                status().isOk()
-        ).andReturn().getResponse().getContentAsString();
-
-        System.out.println("StringResponse = " + StringResponse);
-    }
-
 
 
 }

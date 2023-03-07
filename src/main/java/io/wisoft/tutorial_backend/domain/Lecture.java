@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,7 +26,7 @@ public class Lecture extends BaseEntity {
     private Member createMember;
 
     @OneToMany(mappedBy = "belongLecture")
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<>();
 
     /**
      * 정적 생성자

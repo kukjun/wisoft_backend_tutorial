@@ -1,5 +1,6 @@
 package io.wisoft.tutorial_backend.domain;
 
+import io.wisoft.tutorial_backend.service.dto.UpdateCommentDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,7 +33,7 @@ public class Comment extends BaseEntity {
         Comment comment = new Comment();
         comment.content = content;
         comment.createMember = createMember;
-        comment.belongPost = belongPost;
+        comment.connectBelongPost(belongPost);
         return comment;
     }
 
@@ -48,4 +49,7 @@ public class Comment extends BaseEntity {
         this.belongPost.getComments().remove(this);
     }
 
+    public void update(UpdateCommentDto dto) {
+        content = dto.getContent();
+    }
 }

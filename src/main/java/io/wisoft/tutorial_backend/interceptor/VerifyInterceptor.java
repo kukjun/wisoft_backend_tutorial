@@ -41,6 +41,10 @@ public class VerifyInterceptor implements HandlerInterceptor {
             throw new AuthenticationException("Auth Fail: it was expired or inner exception occur");
         }
 
+        String refreshToken = jwtProvider.refreshToken(token);
+        jwtCommunicationServlet.insert(response, refreshToken);
+        logger.debug("response.getHeader() = " + response.getHeader("Authorization").isEmpty());
+
         return true;
 
     }

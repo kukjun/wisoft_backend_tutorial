@@ -57,12 +57,15 @@ public class MemberService {
         }
     }
 
-    public MemberInformationDto findMember(Long memberId) {
+    public MemberInformationDto findMember(Long memberId, Long currentMemberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(
                         () -> new RuntimeException("member not found")
                 );
 
+        if (member.getId() != currentMemberId) {
+            throw new RuntimeException("current member mismatch");
+        }
         return MemberInformationDto.newInstance(
                 member.getId(),
                 member.getNickname(),

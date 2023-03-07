@@ -4,6 +4,7 @@ import io.wisoft.tutorial_backend.interceptor.AdminVerifyInterceptor;
 import io.wisoft.tutorial_backend.interceptor.VerifyInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -33,7 +34,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/lectures")
                 .addPathPatterns("/api/lectures/**");
         registry.addInterceptor(verifyInterceptor)
-                .addPathPatterns("api/members/")
                 .addPathPatterns("/api/posts/**")
                 .addPathPatterns("/api/comments/**");
     }
