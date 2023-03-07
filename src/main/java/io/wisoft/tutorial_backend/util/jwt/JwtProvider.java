@@ -38,14 +38,14 @@ public class JwtProvider {
     }
 
     // jwt token 생성
-    public String generateToken(long userId, String username, MemberRole memberRole) {
+    public String generateToken(long userId, String username, String memberRole) {
         return Jwts.builder()
                 .setIssuer(issuer)
                 .setSubject(subject)
                 .setAudience(audience)
-                .claim("userId", userId)
+                .claim("userId", String.valueOf(userId))
                 .claim("username", username)
-                .claim("role", memberRole.toString())
+                .claim("role", memberRole)
                 .setExpiration(new Date(System.currentTimeMillis() + tokenValidityInMilliseconds))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
@@ -65,6 +65,16 @@ public class JwtProvider {
         }
     }
 
+    // jwt token refresh
+    public String refreshToken(String token) {
+        Claims allClaims = getAllClaims(token);
+        Long userId = Long.parseLong(allClaims.get("userId", String.class));
+        String userName = allClaims.get("username", String.class);
+        String role = allClaims.get("role", String.class);
+
+        return generateToken(userId, userName, role);
+    }
+
     // 모든 claim 조회
     private Claims getAllClaims(String token) {
         return Jwts.parser()
@@ -74,7 +84,7 @@ public class JwtProvider {
     }
 
     // 명시적 claim 조회
-    private String getClaims(String token, String key) {
+    public String getClaims(String token, String key) {
         Claims claims = getAllClaims(token);
         return claims.get(key, String.class);
     }

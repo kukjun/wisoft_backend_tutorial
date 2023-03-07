@@ -46,7 +46,7 @@ public class MemberService {
             throw new RuntimeException("password mismatch");
         } else {
             String token = jwtProvider.generateToken(
-                    member.getId(), member.getNickname(), member.getRole()
+                    member.getId(), member.getNickname(), member.getRole().toString()
             );
             return SigninResponse.newInstance(
                     member.getId(),

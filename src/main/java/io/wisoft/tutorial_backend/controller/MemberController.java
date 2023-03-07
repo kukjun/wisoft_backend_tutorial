@@ -14,18 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth/")
+@RequestMapping("/api/auth")
 public class MemberController {
     private final MemberService memberService;
 
-    @PostMapping("signup")
+    @PostMapping("/signup")
     public ResponseEntity<SignupDto> signup(@RequestBody SignupDto request) {
         SignupDto response = memberService.createMember(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("signin")
+    @PostMapping("/signin")
     public ResponseEntity<SigninResponse> signin(@RequestBody SigninRequest request) {
         SigninResponse response = memberService.loginMember(request);
 
