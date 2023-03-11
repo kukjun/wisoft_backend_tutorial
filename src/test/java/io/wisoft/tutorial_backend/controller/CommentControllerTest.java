@@ -6,8 +6,8 @@ import io.wisoft.tutorial_backend.repository.CommentRepository;
 import io.wisoft.tutorial_backend.repository.LectureRepository;
 import io.wisoft.tutorial_backend.repository.MemberRepository;
 import io.wisoft.tutorial_backend.repository.PostRepository;
-import io.wisoft.tutorial_backend.service.dto.CreateCommentDto;
-import io.wisoft.tutorial_backend.service.dto.UpdateCommentDto;
+import io.wisoft.tutorial_backend.controller.dto.CreateCommentDto;
+import io.wisoft.tutorial_backend.controller.dto.UpdateCommentDto;
 import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,10 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional

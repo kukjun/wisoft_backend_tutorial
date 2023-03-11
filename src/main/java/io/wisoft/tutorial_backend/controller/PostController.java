@@ -1,13 +1,14 @@
 package io.wisoft.tutorial_backend.controller;
 
 import io.wisoft.tutorial_backend.service.PostService;
-import io.wisoft.tutorial_backend.service.dto.DetailPostDto;
-import io.wisoft.tutorial_backend.service.dto.PostDto;
-import io.wisoft.tutorial_backend.service.dto.SimplePostDto;
-import io.wisoft.tutorial_backend.service.dto.UpdatePostDto;
+import io.wisoft.tutorial_backend.controller.dto.DetailPostDto;
+import io.wisoft.tutorial_backend.controller.dto.PostDto;
+import io.wisoft.tutorial_backend.controller.dto.SimplePostDto;
+import io.wisoft.tutorial_backend.controller.dto.UpdatePostDto;
 import io.wisoft.tutorial_backend.util.jwt.JwtCommunicationServlet;
 import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class PostController {
     private final JwtProvider jwtProvider;
 
     @PostMapping("")
-    public ResponseEntity register(HttpServletRequest request, @RequestBody PostDto postDto) {
+    public ResponseEntity register(HttpServletRequest request, @RequestBody @Valid final PostDto postDto) {
         String token = jwtCommunicationServlet.extract(request);
         Long userId = Long.parseLong(jwtProvider.getClaims(token, "userId"));
         postService.createPost(postDto, userId);
@@ -40,7 +41,7 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}")
-    public ResponseEntity update(HttpServletRequest request, @PathVariable("postId") Long postId, @RequestBody UpdatePostDto updatePostDto) {
+    public ResponseEntity update(HttpServletRequest request, @PathVariable("postId") Long postId, @RequestBody @Valid final UpdatePostDto updatePostDto) {
         String token = jwtCommunicationServlet.extract(request);
         Long userId = Long.parseLong(jwtProvider.getClaims(token, "userId"));
         postService.updatePost(updatePostDto, postId, userId);

@@ -3,11 +3,13 @@ package io.wisoft.tutorial_backend.service;
 
 import io.wisoft.tutorial_backend.domain.Lecture;
 import io.wisoft.tutorial_backend.domain.Member;
+import io.wisoft.tutorial_backend.handler.exception.service.CurrentMemberMismatchException;
+import io.wisoft.tutorial_backend.handler.exception.service.LectureNotFoundException;
+import io.wisoft.tutorial_backend.handler.exception.service.MemberNotFoundException;
 import io.wisoft.tutorial_backend.repository.LectureRepository;
 import io.wisoft.tutorial_backend.repository.MemberRepository;
-import io.wisoft.tutorial_backend.service.dto.FindLectureDto;
-import io.wisoft.tutorial_backend.service.dto.LectureDto;
-import io.wisoft.tutorial_backend.service.dto.LectureDtoList;
+import io.wisoft.tutorial_backend.controller.dto.FindLectureDto;
+import io.wisoft.tutorial_backend.controller.dto.LectureDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +29,7 @@ public class LectureService {
     public void createLecture(LectureDto dto, Long createMemberId) {
         Member createMember = memberRepository.findById(createMemberId)
                 .orElseThrow(
-                        () -> new RuntimeException("member not found")
+                        () -> new MemberNotFoundException("member not found")
                 );
 
         Lecture lecture = Lecture.newInstance(
@@ -45,15 +47,15 @@ public class LectureService {
     public void updateLecture(Long lectureId, LectureDto updateDto, Long currentMemberId) {
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(
-                        () -> new RuntimeException("lecture not found")
+                        () -> new LectureNotFoundException("lecture not found")
                 );
 
         Member member = memberRepository.findById(currentMemberId).orElseThrow(
-                () -> new RuntimeException("member not found")
+                () -> new MemberNotFoundException("member not found")
         );
 
         if (lecture.getCreateMember().getId() != member.getId()) {
-            throw new RuntimeException("createMember Mismatch");
+            throw new CurrentMemberMismatchException("createMember Mismatch");
         }
 
         lecture.update(

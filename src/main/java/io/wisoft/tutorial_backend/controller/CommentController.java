@@ -1,11 +1,12 @@
 package io.wisoft.tutorial_backend.controller;
 
 import io.wisoft.tutorial_backend.service.CommentService;
-import io.wisoft.tutorial_backend.service.dto.CreateCommentDto;
-import io.wisoft.tutorial_backend.service.dto.UpdateCommentDto;
+import io.wisoft.tutorial_backend.controller.dto.CreateCommentDto;
+import io.wisoft.tutorial_backend.controller.dto.UpdateCommentDto;
 import io.wisoft.tutorial_backend.util.jwt.JwtCommunicationServlet;
 import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class CommentController {
     private final JwtProvider jwtProvider;
 
     @PostMapping("")
-    public ResponseEntity register(HttpServletRequest request, @RequestBody CreateCommentDto dto) {
+    public ResponseEntity register(HttpServletRequest request, @RequestBody @Valid final CreateCommentDto dto) {
         String token = jwtCommunicationServlet.extract(request);
         Long userId = Long.parseLong(jwtProvider.getClaims(token, "userId"));
         commentService.registerComment(dto, userId);
@@ -30,7 +31,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity update(HttpServletRequest request, @PathVariable("commentId") Long commentId, @RequestBody UpdateCommentDto dto) {
+    public ResponseEntity update(HttpServletRequest request, @PathVariable("commentId") Long commentId, @RequestBody @Valid final UpdateCommentDto dto) {
 
         String token = jwtCommunicationServlet.extract(request);
         Long userId = Long.parseLong(jwtProvider.getClaims(token, "userId"));

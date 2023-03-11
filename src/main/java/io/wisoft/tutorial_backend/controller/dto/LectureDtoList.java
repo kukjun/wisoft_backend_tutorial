@@ -1,4 +1,4 @@
-package io.wisoft.tutorial_backend.service.dto;
+package io.wisoft.tutorial_backend.controller.dto;
 
 import lombok.AccessLevel;
 import lombok.Getter;

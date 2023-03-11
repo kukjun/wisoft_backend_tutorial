@@ -1,5 +1,6 @@
-package io.wisoft.tutorial_backend.service.dto;
+package io.wisoft.tutorial_backend.controller.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UpdateCommentDto {
+    @NotBlank
     private String content;
 
     public static UpdateCommentDto newInstance(

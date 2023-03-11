@@ -1,6 +1,6 @@
 package io.wisoft.tutorial_backend.domain;
 
-import io.wisoft.tutorial_backend.service.dto.UpdatePostDto;
+import io.wisoft.tutorial_backend.controller.dto.UpdatePostDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

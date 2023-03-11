@@ -1,13 +1,17 @@
 package io.wisoft.tutorial_backend.service;
 
+import io.wisoft.tutorial_backend.controller.dto.*;
 import io.wisoft.tutorial_backend.domain.Comment;
 import io.wisoft.tutorial_backend.domain.Lecture;
 import io.wisoft.tutorial_backend.domain.Member;
 import io.wisoft.tutorial_backend.domain.Post;
+import io.wisoft.tutorial_backend.handler.exception.service.CurrentMemberMismatchException;
+import io.wisoft.tutorial_backend.handler.exception.service.LectureNotFoundException;
+import io.wisoft.tutorial_backend.handler.exception.service.MemberNotFoundException;
+import io.wisoft.tutorial_backend.handler.exception.service.PostNotFoundException;
 import io.wisoft.tutorial_backend.repository.LectureRepository;
 import io.wisoft.tutorial_backend.repository.MemberRepository;
 import io.wisoft.tutorial_backend.repository.PostRepository;
-import io.wisoft.tutorial_backend.service.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +35,10 @@ public class PostService {
         Long lectureId = dto.getLectureId();
         logger.debug("lectureId: " + lectureId);
         Lecture belongLecture = lectureRepository.findById(lectureId).orElseThrow(
-                () -> new RuntimeException("lecture not found")
+                () -> new LectureNotFoundException("lecture not found")
         );
         Member createMember = memberRepository.findById(createMemberId).orElseThrow(
-                () -> new RuntimeException("member not found")
+                () -> new MemberNotFoundException("member not found")
         );
         Post post = Post.newInstance(
                 dto.getTitle(),
@@ -49,11 +53,11 @@ public class PostService {
     @Transactional
     public void updatePost(UpdatePostDto dto, Long postId, Long currentMemberId) {
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new RuntimeException("post not found")
+                () -> new PostNotFoundException("post not found")
         );
 
         if (post.getCreateMember().getId() != currentMemberId) {
-            throw new RuntimeException("createMember Mismatch");
+            throw new CurrentMemberMismatchException("createMember Mismatch");
         }
 
         post.update(dto);
@@ -75,7 +79,7 @@ public class PostService {
 
     public DetailPostDto findPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new RuntimeException("post not found")
+                () -> new PostNotFoundException("post not found")
         );
         List<Comment> commentList = post.getComments();
         List<CommentDto> comments = new ArrayList<>();

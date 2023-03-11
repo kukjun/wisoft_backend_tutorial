@@ -1,5 +1,8 @@
-package io.wisoft.tutorial_backend.service.dto;
+package io.wisoft.tutorial_backend.controller.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,10 +10,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FindLectureDto {
+    @NotNull
     private Long id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String schedule;
+    @NotBlank
     private String content;
+    @NotBlank
     private String teacher;
 
     public static FindLectureDto newInstance(

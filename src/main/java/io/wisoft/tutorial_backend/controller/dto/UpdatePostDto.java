@@ -1,25 +1,25 @@
-package io.wisoft.tutorial_backend.service.dto;
+package io.wisoft.tutorial_backend.controller.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostDto {
+public class UpdatePostDto {
+    @NotBlank
     private String title;
+    @NotBlank
     private String content;
-    private Long lectureId;
 
-    public static PostDto newInstance(
+    public static UpdatePostDto newInstance(
             String title,
-            String content,
-            Long lectureId
+            String content
     ) {
-        PostDto dto = new PostDto();
+        UpdatePostDto dto = new UpdatePostDto();
         dto.title = title;
         dto.content = content;
-        dto.lectureId = lectureId;
         return dto;
     }
 }

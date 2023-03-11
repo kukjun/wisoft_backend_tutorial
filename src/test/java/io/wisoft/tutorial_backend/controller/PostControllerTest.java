@@ -6,9 +6,8 @@ import io.wisoft.tutorial_backend.repository.CommentRepository;
 import io.wisoft.tutorial_backend.repository.LectureRepository;
 import io.wisoft.tutorial_backend.repository.MemberRepository;
 import io.wisoft.tutorial_backend.repository.PostRepository;
-import io.wisoft.tutorial_backend.service.dto.LectureDto;
-import io.wisoft.tutorial_backend.service.dto.PostDto;
-import io.wisoft.tutorial_backend.service.dto.UpdatePostDto;
+import io.wisoft.tutorial_backend.controller.dto.PostDto;
+import io.wisoft.tutorial_backend.controller.dto.UpdatePostDto;
 import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,10 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -132,6 +129,7 @@ class PostControllerTest {
                 "는 없습니다",
                 storedLectureId
         );
+
 
         Member createMember = memberRepository.findById(currentMemberId).get();
         System.out.println("createMember: " + createMember.getNickname());

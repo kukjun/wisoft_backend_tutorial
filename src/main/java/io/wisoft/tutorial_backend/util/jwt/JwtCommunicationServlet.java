@@ -1,6 +1,6 @@
 package io.wisoft.tutorial_backend.util.jwt;
 
-import io.wisoft.tutorial_backend.handler.AuthenticationException;
+import io.wisoft.tutorial_backend.handler.exception.interceptor.AuthenticationException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;

@@ -1,7 +1,7 @@
 package io.wisoft.tutorial_backend.interceptor;
 
 import io.wisoft.tutorial_backend.domain.MemberRole;
-import io.wisoft.tutorial_backend.handler.AuthenticationException;
+import io.wisoft.tutorial_backend.handler.exception.interceptor.AuthenticationException;
 import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
 import io.wisoft.tutorial_backend.util.jwt.JwtCommunicationServlet;
 import jakarta.servlet.http.HttpServletRequest;

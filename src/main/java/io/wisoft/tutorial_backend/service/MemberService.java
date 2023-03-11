@@ -2,11 +2,14 @@ package io.wisoft.tutorial_backend.service;
 
 import io.wisoft.tutorial_backend.domain.Member;
 import io.wisoft.tutorial_backend.domain.MemberRole;
+import io.wisoft.tutorial_backend.handler.exception.service.CurrentMemberMismatchException;
+import io.wisoft.tutorial_backend.handler.exception.service.MemberNotFoundException;
+import io.wisoft.tutorial_backend.handler.exception.service.PasswordMismatchException;
 import io.wisoft.tutorial_backend.repository.MemberRepository;
-import io.wisoft.tutorial_backend.service.dto.MemberInformationDto;
-import io.wisoft.tutorial_backend.service.dto.SigninRequest;
-import io.wisoft.tutorial_backend.service.dto.SigninResponse;
-import io.wisoft.tutorial_backend.service.dto.SignupDto;
+import io.wisoft.tutorial_backend.controller.dto.MemberInformationDto;
+import io.wisoft.tutorial_backend.controller.dto.SigninRequest;
+import io.wisoft.tutorial_backend.controller.dto.SigninResponse;
+import io.wisoft.tutorial_backend.controller.dto.SignupDto;
 import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,10 +43,10 @@ public class MemberService {
     public SigninResponse loginMember(SigninRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail())
                 .orElseThrow(
-                        ()-> new RuntimeException("email not fount")
+                        ()-> new MemberNotFoundException("email not fount")
                 );
         if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
-            throw new RuntimeException("password mismatch");
+            throw new PasswordMismatchException("password mismatch");
         } else {
             String token = jwtProvider.generateToken(
                     member.getId(), member.getNickname(), member.getRole().toString()
@@ -60,11 +63,11 @@ public class MemberService {
     public MemberInformationDto findMember(Long memberId, Long currentMemberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(
-                        () -> new RuntimeException("member not found")
+                        () -> new MemberNotFoundException("member not found")
                 );
 
         if (member.getId() != currentMemberId) {
-            throw new RuntimeException("current member mismatch");
+            throw new CurrentMemberMismatchException("current member mismatch");
         }
         return MemberInformationDto.newInstance(
                 member.getId(),
