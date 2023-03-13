@@ -30,6 +30,8 @@ public class VerifyInterceptor implements HandlerInterceptor {
         logger.info("user verify interceptor preHandle execute");
         if (request.getMethod().equals("OPTIONS")) {
             return true;
+        } else if (request.getMethod().equals("GET")) {
+            return true;
         }
 
         String token = jwtCommunicationServlet.extract(request);

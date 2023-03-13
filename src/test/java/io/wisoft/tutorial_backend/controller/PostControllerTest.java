@@ -159,17 +159,12 @@ class PostControllerTest {
         //given
         Member createMember = memberRepository.findById(currentMemberId).get();
         System.out.println("createMember: " + createMember.getNickname());
-        String token = jwtProvider.generateToken(
-                createMember.getId(),
-                createMember.getNickname(),
-                createMember.getRole().toString()
-        );
+
         //when
         //then
         mvc.perform(
                 get("/api/posts")
                         .param("lectureId", String.valueOf(storedLectureId))
-                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 status().isOk()
         );
@@ -213,17 +208,11 @@ class PostControllerTest {
         //given
         Member createMember = memberRepository.findById(currentMemberId).get();
         System.out.println("createMember: " + createMember.getNickname());
-        String token = jwtProvider.generateToken(
-                createMember.getId(),
-                createMember.getNickname(),
-                createMember.getRole().toString()
-        );
 
         //when
         //then
         mvc.perform(
                 get("/api/posts/" + storedPostId)
-                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 status().isOk()
         );
