@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wisoft.tutorial_backend.domain.Lecture;
 import io.wisoft.tutorial_backend.domain.Member;
 import io.wisoft.tutorial_backend.domain.MemberRole;
-import io.wisoft.tutorial_backend.repository.LectureRepository;
-import io.wisoft.tutorial_backend.repository.MemberRepository;
 import io.wisoft.tutorial_backend.controller.dto.LectureDto;
 import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
 import org.junit.jupiter.api.BeforeEach;

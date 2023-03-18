@@ -2,10 +2,6 @@ package io.wisoft.tutorial_backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wisoft.tutorial_backend.domain.*;
-import io.wisoft.tutorial_backend.repository.CommentRepository;
-import io.wisoft.tutorial_backend.repository.LectureRepository;
-import io.wisoft.tutorial_backend.repository.MemberRepository;
-import io.wisoft.tutorial_backend.repository.PostRepository;
 import io.wisoft.tutorial_backend.controller.dto.CreateCommentDto;
 import io.wisoft.tutorial_backend.controller.dto.UpdateCommentDto;
 import io.wisoft.tutorial_backend.util.jwt.JwtProvider;

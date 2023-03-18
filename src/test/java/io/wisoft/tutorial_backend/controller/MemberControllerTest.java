@@ -3,7 +3,6 @@ package io.wisoft.tutorial_backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wisoft.tutorial_backend.domain.Member;
 import io.wisoft.tutorial_backend.domain.MemberRole;
-import io.wisoft.tutorial_backend.repository.MemberRepository;
 import io.wisoft.tutorial_backend.controller.dto.SigninRequest;
 import io.wisoft.tutorial_backend.controller.dto.SignupDto;
 import io.wisoft.tutorial_backend.util.jwt.JwtProvider;
